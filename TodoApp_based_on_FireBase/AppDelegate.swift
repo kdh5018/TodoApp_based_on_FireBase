@@ -6,15 +6,29 @@
 //
 
 import UIKit
+import FirebaseCore
+import KakaoSDKCommon
+import KakaoSDKAuth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        // 파이어베이스 설정
+        FirebaseApp.configure()
+        // 카카오 초기화
+        KakaoSDK.initSDK(appKey: "369124b2657e71f8f54972962237fe07")
         return true
+    }
+    
+    // 카카오에서 프로잭트 앱으로 돌아왔을 때 로그인 처리 완료하기 위한 코드
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if (AuthApi.isKakaoTalkLoginUrl(url)) {
+            return AuthController.handleOpenUrl(url: url)
+        }
+
+        return false
     }
 
     // MARK: UISceneSession Lifecycle
